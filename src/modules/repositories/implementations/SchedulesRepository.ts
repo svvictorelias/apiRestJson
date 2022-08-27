@@ -22,11 +22,22 @@ class SchedulesRepository implements IScheduleRepository {
       intervals,
       created_at: new Date()
     });
-    this.schedules.push(schedule)
+    this.schedules.push(schedule);
   }
 
   list(): Schedule[] {
     return this.schedules;
+  }
+
+  findById(id: string): Schedule {
+    const schedule = this.schedules.find(schedule => schedule.id === id);
+    return schedule;
+  }
+
+  delete(id: string): Schedule[] {
+    const schedules = this.schedules.filter(schedule => schedule.id !== id);
+    this.schedules = schedules;
+    return schedules;
   }
 }
 
