@@ -34,6 +34,15 @@ class SchedulesRepository implements IScheduleRepository {
     return schedule;
   }
 
+  findByDate(start: string, end:string):Schedule[]{
+    const schedule = this.schedules.filter(schedule=>{
+      if(schedule.type ==='onlyOne'){
+        return schedule
+      }
+    })
+    return schedule
+  }
+
   delete(id: string): Schedule[] {
     const schedules = this.schedules.filter(schedule => schedule.id !== id);
     this.schedules = schedules;

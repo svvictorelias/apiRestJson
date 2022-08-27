@@ -14,6 +14,7 @@ interface IScheduleDTO {
 interface IScheduleRepository {
   list(): Schedule[];
   findById(id: string): Schedule;
+  findByDate(start: string, end:string): Schedule[]
   create({ type, roleSchedule, intervals }: IScheduleDTO): void;
   delete(id: string): Schedule[];
 }
