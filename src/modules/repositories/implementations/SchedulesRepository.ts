@@ -1,3 +1,4 @@
+import { convertDate } from '../../../utils/convertDate';
 import { Schedule } from '../../model/Schedules';
 import {
   IListSchedulesAvaliable,
@@ -39,13 +40,13 @@ class SchedulesRepository implements IScheduleRepository {
   }
 
   findByDate(start: string, end: string): Schedule[] {
-    this.convertDate(start);
+    convertDate(start);
     const newSchedule: IListSchedulesAvaliable | any = [];
     const schedule = this.schedules.filter(schedule => {
       if (schedule.type === 'onlyOne') {
         if (
-          this.convertDate(schedule.day) >= this.convertDate(start) &&
-          this.convertDate(schedule.day) <= this.convertDate(end)
+          convertDate(schedule.day) >= convertDate(start) &&
+          convertDate(schedule.day) <= convertDate(end)
         ) {
           newSchedule.push({
             day: schedule.day,
@@ -55,9 +56,9 @@ class SchedulesRepository implements IScheduleRepository {
       }
       if (schedule.type === 'everyDay') {
         let count = 0;
-        while (this.convertDate(start) + count <= this.convertDate(end)) {
+        while (convertDate(start) + count <= convertDate(end)) {
           let formatedDate = new Date(
-            this.convertDate(start) + count
+            convertDate(start) + count
           ).toLocaleDateString();
           formatedDate = formatedDate.replace('/', '-').replace('/', '-');
           count += 86400000;
@@ -69,11 +70,11 @@ class SchedulesRepository implements IScheduleRepository {
       }
       if (schedule.type === 'week') {
         let count = 0;
-        while (this.convertDate(start) + count <= this.convertDate(end)) {
-          let dayDate = new Date(this.convertDate(start) + count).getDay();
+        while (convertDate(start) + count <= convertDate(end)) {
+          let dayDate = new Date(convertDate(start) + count).getDay();
           if (schedule.day.includes(`${dayDate}`)) {
             let formatedDate = new Date(
-              this.convertDate(start) + count
+              convertDate(start) + count
             ).toLocaleDateString();
             formatedDate = formatedDate.replace('/', '-').replace('/', '-');
             newSchedule.push({
@@ -89,13 +90,7 @@ class SchedulesRepository implements IScheduleRepository {
     return newSchedule;
   }
 
-  convertDate(date: string): number {
-    const splitDate = date.split('-');
-    const newDate = new Date(
-      `${splitDate[2]},${splitDate[1]},${splitDate[0]}`
-    ).getTime();
-    return newDate;
-  }
+
 
   delete(id: string): Schedule[] {
     const schedules = this.schedules.filter(schedule => schedule.id !== id);
