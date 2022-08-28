@@ -1,14 +1,16 @@
+import { AppError } from '../../../errors/AppError';
 import { Schedule } from '../../model/Schedules';
-import {
-  IScheduleDTO,
-  IScheduleRepository
-} from '../ISchedulesRepository';
+import { IScheduleDTO, IScheduleRepository } from '../ISchedulesRepository';
+const fs = require('fs');
 
 class SchedulesRepository implements IScheduleRepository {
   private schedules: Schedule[];
   private static INSTANCE: SchedulesRepository;
+
   private constructor() {
-    this.schedules = [];
+    this.init().then(resp => {
+      this.schedules = resp ? JSON.parse(resp) : [];
+    });
   }
 
   public static getInstance(): SchedulesRepository {
@@ -17,7 +19,19 @@ class SchedulesRepository implements IScheduleRepository {
     }
     return SchedulesRepository.INSTANCE;
   }
-  create({ type, day, intervals }: IScheduleDTO): void {
+
+  async init() {
+    try {
+      const data = await fs.promises.readFile(
+        './data/dataSchedules.json',
+        'utf8'
+      );
+      return data;
+    } catch (err) {
+      throw new AppError('Ocorreu um erro ao iniciar aplicação', 500);
+    }
+  }
+  async create({ type, day, intervals }: IScheduleDTO): Promise<void> {
     const schedule = new Schedule();
     Object.assign(schedule, {
       type,
@@ -26,6 +40,13 @@ class SchedulesRepository implements IScheduleRepository {
       created_at: new Date()
     });
     this.schedules.push(schedule);
+    fs.writeFile(
+      './data/dataSchedules.json',
+      JSON.stringify(this.schedules),
+      err => {
+        if (err) throw err;
+      }
+    );
   }
 
   list(): Schedule[] {
