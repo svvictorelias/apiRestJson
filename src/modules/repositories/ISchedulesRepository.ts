@@ -4,19 +4,28 @@ interface IIntervals {
   start: string;
   end: string;
 }
+interface IListSchedulesAvaliable {
+  day: string;
+  intervals: IIntervals[];
+}
 
 interface IScheduleDTO {
   type: string;
-  roleSchedule: string;
+  day: string;
   intervals: IIntervals[];
 }
 
 interface IScheduleRepository {
   list(): Schedule[];
   findById(id: string): Schedule;
-  findByDate(start: string, end:string): Schedule[]
-  create({ type, roleSchedule, intervals }: IScheduleDTO): void;
+  findByDate(start: string, end: string): Schedule[];
+  create({ type, day, intervals }: IScheduleDTO): void;
   delete(id: string): Schedule[];
 }
 
-export { IScheduleDTO, IScheduleRepository, IIntervals };
+export {
+  IScheduleDTO,
+  IScheduleRepository,
+  IIntervals,
+  IListSchedulesAvaliable
+};

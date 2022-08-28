@@ -5,15 +5,15 @@ import {
 
 interface IRequest {
   type: string;
-  roleSchedule: string;
+  day: string;
   intervals: IIntervals[];
 }
 
 class CreateScheduleUseCase {
   constructor(private schedulesRepository: IScheduleRepository) {}
 
-  execute({ type, roleSchedule, intervals }: IRequest): void {
-    this.schedulesRepository.create({ type, roleSchedule, intervals });
+  execute({ type, day, intervals }: IRequest): void {
+    this.schedulesRepository.create({ type, day, intervals });
   }
 }
 

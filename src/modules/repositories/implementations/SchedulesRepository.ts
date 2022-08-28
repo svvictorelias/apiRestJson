@@ -1,5 +1,5 @@
 import { Schedule } from '../../model/Schedules';
-import { IScheduleDTO, IScheduleRepository } from '../ISchedulesRepository';
+import { IListSchedulesAvaliable, IScheduleDTO, IScheduleRepository } from '../ISchedulesRepository';
 
 class SchedulesRepository implements IScheduleRepository {
   private schedules: Schedule[];
@@ -14,11 +14,11 @@ class SchedulesRepository implements IScheduleRepository {
     }
     return SchedulesRepository.INSTANCE;
   }
-  create({ type, roleSchedule, intervals }: IScheduleDTO): void {
+  create({ type, day, intervals }: IScheduleDTO): void {
     const schedule = new Schedule();
     Object.assign(schedule, {
       type,
-      roleSchedule,
+      day,
       intervals,
       created_at: new Date()
     });
@@ -34,13 +34,40 @@ class SchedulesRepository implements IScheduleRepository {
     return schedule;
   }
 
-  findByDate(start: string, end:string):Schedule[]{
-    const schedule = this.schedules.filter(schedule=>{
-      if(schedule.type ==='onlyOne'){
-        return schedule
+  findByDate(start: string, end: string): Schedule[] {
+    this.convertDate(start);
+    const newSchedule: IListSchedulesAvaliable | any = []
+    const schedule = this.schedules.filter(schedule => {
+      if (schedule.type === 'onlyOne') {
+        if (
+          this.convertDate(schedule.day) >= this.convertDate(start) &&
+          this.convertDate(schedule.day) <= this.convertDate(end)
+        ) {
+          newSchedule.push({day: schedule.day, intervals: schedule.intervals})
+        }
       }
-    })
-    return schedule
+      if(schedule.type === 'everyDay'){
+        let count = 0
+        while(this.convertDate(start)+count<=this.convertDate(end)){
+          let formatedDate = new Date(this.convertDate(start)+count).toLocaleDateString()
+          formatedDate = formatedDate.replace('/','-')
+          formatedDate = formatedDate.replace('/','-')
+          console.log(formatedDate)
+          count+=86400000
+          newSchedule.push({day: formatedDate, intervals: schedule.intervals})
+        }
+      }
+    });
+
+    return newSchedule;
+  }
+
+  convertDate(date: string): number {
+    const splitDate = date.split('-');
+    const newDate = new Date(
+      `${splitDate[2]},${splitDate[1]},${splitDate[0]}`
+    ).getTime();
+    return newDate;
   }
 
   delete(id: string): Schedule[] {

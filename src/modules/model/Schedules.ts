@@ -4,7 +4,7 @@ import { IIntervals } from '../repositories/ISchedulesRepository';
 class Schedule {
   id: string;
   type: string;
-  roleSchedule: string;
+  day: string;
   intervals: IIntervals[];
   created_at: Date;
 
