@@ -1,3 +1,4 @@
+import { AppError } from "../../../errors/AppError";
 import { convertDate } from "../../../utils/convertDate";
 import { Schedule } from "../../model/Schedules";
 import { IListSchedulesAvaliable, IScheduleRepository } from "../../repositories/ISchedulesRepository";
@@ -11,6 +12,12 @@ class ListSchedulesAvailableUseCase{
   constructor(private schedulesRepository: IScheduleRepository) {}
 
   execute({start, end}:IRequest): Schedule[]{
+    if(!start){
+      throw new AppError("A start date it's required",400)
+    }
+    if(!end){
+      throw new AppError("An end date it's required",400)
+    }
     const schedulesAvaliableData: IListSchedulesAvaliable | any = [];
     const schedules = this.schedulesRepository.list()
 
