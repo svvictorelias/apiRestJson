@@ -124,6 +124,60 @@
           }
         }
       },
+      "/schedules/schedulesAvailable":{
+        "get":{
+          "tags":["Schedules"],
+          "summary":"List Schedules by date",
+          "description":"List Schedules by date with day and intervals",
+          "parameters": [
+            {
+              "name": "start",
+              "in": "query",
+              "description": "Schedule date start (DD-MM-YYY)",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "end",
+              "in": "query",
+              "description": "Schedule date end (DD-MM-YYY)",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses":{
+            "200":{
+              "description":"Sucess",
+              "content":{
+                "application/json":{
+                  "schema":{
+                    "type":"array",
+                    "items":{
+                      "type":"object",
+                      "properties":{
+                        "day":{
+                          "type":"string"
+                        },
+                        "intervals":{
+                          "properties":{
+                            "start":{"type":"string"},
+                            "end":{"type":"string"}
+                          }
+                      
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "/schedules/delete/{id}":{
         "delete":{
           "tags":["Schedules"],
