@@ -43,8 +43,8 @@ class SchedulesRepository implements IScheduleRepository {
     fs.writeFile(
       './data/dataSchedules.json',
       JSON.stringify(this.schedules),
-      err => {
-        if (err) throw err;
+      error => {
+        if (error) throw error;
       }
     );
   }
@@ -61,6 +61,13 @@ class SchedulesRepository implements IScheduleRepository {
   delete(id: string): Schedule[] {
     const schedules = this.schedules.filter(schedule => schedule.id !== id);
     this.schedules = schedules;
+    fs.writeFile(
+      './data/dataSchedules.json',
+      JSON.stringify(this.schedules),
+      error => {
+        if (error) throw error;
+      }
+    );
     return schedules;
   }
 }
