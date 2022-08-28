@@ -10,6 +10,47 @@
     },
     "paths":{
       "/schedules":{
+        "get":{
+          "tags":["Schedules"],
+          "summary":"List all Schedules",
+          "description":"List Schedules with all informations",
+          "responses":{
+            "200":{
+              "description":"Sucess",
+              "content":{
+                "application/json":{
+                  "schema":{
+                    "type":"array",
+                    "items":{
+                      "type":"object",
+                      "properties":{
+                        "id":{
+                          "type":"string"
+                        },
+                        "type":{
+                          "type":"string"
+                        },
+                        "day":{
+                          "type":"string"
+                        },
+                        "intervals":{
+                          "properties":{
+                            "start":{"type":"string"},
+                            "end":{"type":"string"}
+                          }
+                      
+                        },
+                        "created_at":{
+                          "type":"string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
         "post":{
           "tags":["Schedules"],
           "summary":"Create a schedule rule",
@@ -28,39 +69,11 @@
                     }
                   }
                 },
-                  "examples":{
-                    "Specific Day":{
-                    "value":{
-                      "type":"onlyOne",
-                      "day":"25-01-2023",
-                      "intervals":[
-                        {
-                          "start":"15:00",
-                          "end":"16:00"
-                        },
-                        {
-                          "start":"17:00",
-                          "end":"18:00"
-                        }
-                      ]
-                      }
-                    },
-                    "Weekly":{
-                    "value":{
-                      "type":"week",
-                      "day":"1,3,5",
-                      "intervals":[
-                        {
-                          "start":"15:00",
-                          "end":"16:00"
-                        }
-                      ]
-                      }
-                    },   
+                  "examples":{            
                     "Daily":{
                     "value":{
                       "type":"everyDay",
-                      "day":"all",
+                      "day":"all", 
                       "intervals":[
                         {
                           "start":"20:00",
@@ -68,7 +81,35 @@
                         }
                       ]
                       }
-                    }   
+                    },
+                    "Weekly":{
+                      "value":{
+                        "type":"week",
+                        "day":"1,3,5",
+                        "intervals":[
+                          {
+                            "start":"15:00",
+                            "end":"16:00"
+                          }
+                        ]
+                        }
+                      }, 
+                    "Specific Day":{
+                      "value":{
+                        "type":"onlyOne",
+                        "day":"25-01-2023",
+                        "intervals":[
+                          {
+                            "start":"15:00",
+                            "end":"16:00"
+                          },
+                          {
+                            "start":"17:00",
+                            "end":"18:00"
+                          }
+                        ]
+                        }
+                      }   
                 }
               }
             }
@@ -82,34 +123,79 @@
             }
           }
         },
-        "get":{
-          "tags":["Category"],
-          "summary":"List all categories",
-          "description":"List all categories",
-          "responses":{
-            "200":{
-              "description":"Sucess",
-              "content":{
-                "application/json":{
-                  "schema":{
-                    "type":"array",
-                    "items":{
-                      "type":"object",
-                      "properties":{
-                        "name":{
-                          "type":"string"
-                        },
-                        "description":{
-                          "type":"string"
-                        }
-                      }
+        "delete":{
+          "tags":["Schedules"],
+          "summary":"Create a schedule rule",
+          "description":"Create a new schedule rule with three different types<br>1 - Daily: 'everyDay'<br>2 - weekly: 'week'<br>3 - Specific day: 'onlyOne'",
+          "requestBody":{
+            "content":{
+              "application/json":{
+                "schema":{
+                  "type":"object",
+                  "properties":{
+                    "name":{
+                      "type":"string"
+                    },
+                    "description":{
+                      "type":"string"
                     }
                   }
+                },
+                  "examples":{            
+                    "Daily":{
+                    "value":{
+                      "type":"everyDay",
+                      "day":"all", 
+                      "intervals":[
+                        {
+                          "start":"20:00",
+                          "end":"21:00"
+                        }
+                      ]
+                      }
+                    },
+                    "Weekly":{
+                      "value":{
+                        "type":"week",
+                        "day":"1,3,5",
+                        "intervals":[
+                          {
+                            "start":"15:00",
+                            "end":"16:00"
+                          }
+                        ]
+                        }
+                      }, 
+                    "Specific Day":{
+                      "value":{
+                        "type":"onlyOne",
+                        "day":"25-01-2023",
+                        "intervals":[
+                          {
+                            "start":"15:00",
+                            "end":"16:00"
+                          },
+                          {
+                            "start":"17:00",
+                            "end":"18:00"
+                          }
+                        ]
+                        }
+                      }   
                 }
               }
             }
+          },
+          "responses":{
+            "201":{
+              "description":"Created"
+            },
+            "500":{
+              "description":"Category already exists"
+            }
           }
         }
+        
       }
     }
 }

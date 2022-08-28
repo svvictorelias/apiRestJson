@@ -1,3 +1,4 @@
+import { AppError } from "../../../errors/AppError";
 import { IScheduleRepository } from "../../repositories/ISchedulesRepository";
 
 class DeleteScheduleUseCase{
@@ -6,7 +7,7 @@ class DeleteScheduleUseCase{
   execute(id:string):void{
     const scheduleExists = this.schedulesRepository.findById(id)
     if(!scheduleExists){
-      throw new Error("Schedule don't exists!")
+      throw new AppError("Schedule don't exists!",404)
     }
     this.schedulesRepository.delete(id)
   }
