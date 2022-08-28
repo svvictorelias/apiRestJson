@@ -1,5 +1,9 @@
 import { Schedule } from '../../model/Schedules';
-import { IListSchedulesAvaliable, IScheduleDTO, IScheduleRepository } from '../ISchedulesRepository';
+import {
+  IListSchedulesAvaliable,
+  IScheduleDTO,
+  IScheduleRepository
+} from '../ISchedulesRepository';
 
 class SchedulesRepository implements IScheduleRepository {
   private schedules: Schedule[];
@@ -36,25 +40,48 @@ class SchedulesRepository implements IScheduleRepository {
 
   findByDate(start: string, end: string): Schedule[] {
     this.convertDate(start);
-    const newSchedule: IListSchedulesAvaliable | any = []
+    const newSchedule: IListSchedulesAvaliable | any = [];
     const schedule = this.schedules.filter(schedule => {
       if (schedule.type === 'onlyOne') {
         if (
           this.convertDate(schedule.day) >= this.convertDate(start) &&
           this.convertDate(schedule.day) <= this.convertDate(end)
         ) {
-          newSchedule.push({day: schedule.day, intervals: schedule.intervals})
+          newSchedule.push({
+            day: schedule.day,
+            intervals: schedule.intervals
+          });
         }
       }
-      if(schedule.type === 'everyDay'){
-        let count = 0
-        while(this.convertDate(start)+count<=this.convertDate(end)){
-          let formatedDate = new Date(this.convertDate(start)+count).toLocaleDateString()
-          formatedDate = formatedDate.replace('/','-')
-          formatedDate = formatedDate.replace('/','-')
-          console.log(formatedDate)
-          count+=86400000
-          newSchedule.push({day: formatedDate, intervals: schedule.intervals})
+      if (schedule.type === 'everyDay') {
+        let count = 0;
+        while (this.convertDate(start) + count <= this.convertDate(end)) {
+          let formatedDate = new Date(
+            this.convertDate(start) + count
+          ).toLocaleDateString();
+          formatedDate = formatedDate.replace('/', '-').replace('/', '-');
+          count += 86400000;
+          newSchedule.push({
+            day: formatedDate,
+            intervals: schedule.intervals
+          });
+        }
+      }
+      if (schedule.type === 'week') {
+        let count = 0;
+        while (this.convertDate(start) + count <= this.convertDate(end)) {
+          let dayDate = new Date(this.convertDate(start) + count).getDay();
+          if (schedule.day.includes(`${dayDate}`)) {
+            let formatedDate = new Date(
+              this.convertDate(start) + count
+            ).toLocaleDateString();
+            formatedDate = formatedDate.replace('/', '-').replace('/', '-');
+            newSchedule.push({
+              day: formatedDate,
+              intervals: schedule.intervals
+            });
+          }
+          count += 86400000;
         }
       }
     });
