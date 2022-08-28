@@ -6,7 +6,7 @@ class ListSchedulesAvailableController{
   constructor(private listSchedulesAvailableUseCase: ListSchedulesAvailableUseCase){}
 
   handle(request: Request, response: Response): Response{
-    const {start, end} = request.query
+    const {start, end} = request.query as string | any
     const schedules = this.listSchedulesAvailableUseCase.execute({start,end})
     return response.status(200).send(schedules)
   }
