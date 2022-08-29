@@ -54,7 +54,7 @@
         "post":{
           "tags":["Schedules"],
           "summary":"Create a schedule rule",
-          "description":"Create a new schedule rule with three different types<br>1 - Daily: 'everyDay'<br>2 - weekly: 'week'<br>3 - Specific day: 'onlyOne'",
+          "description":"Create a new schedule rule with three different types<br>1 - Daily: 'everyDay'  <strong>Attention</strong> in day param just pass 'all'<br>2 - weekly: 'week' <strong>Attention</strong> in day param choose numbers between 1 and 6, this represents the days of the week, being 0 Sunday and 6 Saturday <br>3 - Specific day: 'onlyOne'  <strong>Attention</strong> in day param choose a date in this format: 'DD-MM-YYYY'",
           "requestBody":{
             "content":{
               "application/json":{
