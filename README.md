@@ -45,6 +45,7 @@ And finally, use the `npm run dev` to start the server in development mode using
 <br/>
 
 ## With more details, acess the http://localhost:3333/api-docs/
+## Acess this to get postman https://www.getpostman.com/collections/9026e3307125b8733aa0
 
 ## Contact https://www.linkedin.com/in/svvictorelias/
 
